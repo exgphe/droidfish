@@ -22,8 +22,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
+
+import androidx.annotation.NonNull;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
+import androidx.preference.PreferenceViewHolder;
+
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -62,9 +66,12 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
     }
 
     @Override
-    protected View onCreateView(ViewGroup parent) {
-        super.onCreateView(parent);
+    public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        onCreateView();
+    }
 
+    protected View onCreateView() {
         binding = SeekbarPreferenceBinding.inflate(
                 LayoutInflater.from(getContext()), null, false);
         binding.seekbarTitle.setText(getTitle());
@@ -138,7 +145,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
             seekBar.setProgress(progress);
         currVal = progress;
         binding.seekbarValue.setText(valToString());
-        SharedPreferences.Editor editor = getEditor();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
         editor.putInt(getKey(), progress);
         editor.apply();
         if ((progress == 0) && showStrengthHint) {

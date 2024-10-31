@@ -22,7 +22,11 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Color;
-import android.preference.Preference;
+
+import androidx.annotation.NonNull;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceViewHolder;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -49,7 +53,7 @@ public class ColorPickerPreference
     private int mValue = Color.BLACK;
     private float mDensity = 0;
 
-    private static final String androidns = "http://schemas.android.com/apk/res/android";
+    private static final String appns = "http://schemas.android.com/apk/res-auto";
 
     public ColorPickerPreference(Context context) {
         super(context);
@@ -75,7 +79,7 @@ public class ColorPickerPreference
         mDensity = getContext().getResources().getDisplayMetrics().density;
         setOnPreferenceClickListener(this);
         if (attrs != null) {
-            String defaultValue = attrs.getAttributeValue(androidns, "defaultValue");
+            String defaultValue = attrs.getAttributeValue(appns, "defaultValue");
             if (defaultValue.startsWith("#")) {
                 try {
                     mDefaultValue = convertToColorInt(defaultValue);
@@ -84,7 +88,7 @@ public class ColorPickerPreference
                     mDefaultValue = convertToColorInt("#FF000000");
                 }
             } else {
-                int resourceId = attrs.getAttributeResourceValue(androidns, "defaultValue", 0);
+                int resourceId = attrs.getAttributeResourceValue(appns, "defaultValue", 0);
                 if (resourceId != 0) {
                     mDefaultValue = context.getResources().getInteger(resourceId);
                 }
@@ -94,9 +98,8 @@ public class ColorPickerPreference
     }
 
     @Override
-    protected void onBindView(View view) {
-        super.onBindView(view);
-        mView = view;
+    public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
         setPreviewColor();
     }
 

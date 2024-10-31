@@ -35,6 +35,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.core.view.ViewCompat;
+
 public final class Util {
     public final static String boldStart;
     public final static String boldStop;

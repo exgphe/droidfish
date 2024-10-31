@@ -24,7 +24,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
-import android.preference.EditTextPreference;
+
+import androidx.annotation.NonNull;
+import androidx.preference.EditTextPreference;
+import androidx.preference.PreferenceViewHolder;
+
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -75,9 +79,9 @@ public class EditFilePreference extends EditTextPreference {
     }
 
     @Override
-    protected void onBindView(View view) {
-        super.onBindView(view);
-        this.view = view;
+    public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        this.view = holder.itemView;
         addBrowseButton();
     }
 

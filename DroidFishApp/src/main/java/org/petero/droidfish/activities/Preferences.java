@@ -28,9 +28,14 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
+
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,66 +43,78 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 
-import androidx.core.view.ViewCompat;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceFragmentCompat;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class Preferences extends PreferenceActivity {
+public class Preferences extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     private static int currentItem = -1;
     private static int initialItem = -1;
 
-    public static class Fragment extends PreferenceFragment {
+    public static class Fragment extends PreferenceFragmentCompat {
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.preferences);
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            setPreferencesFromResource(R.xml.preferences, rootKey);
         }
 
+        @NonNull
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View v = super.onCreateView(inflater, container, savedInstanceState);
-            if (v == null)
-                return null;
 
-            final ListView lv = v.findViewById(android.R.id.list);
-            if (lv != null) {
-                lv.setOnScrollListener(new OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(AbsListView view, int scrollState) {
-                    }
-                    @Override
-                    public void onScroll(AbsListView view, int firstVisibleItem,
-                                         int visibleItemCount, int totalItemCount) {
-                        currentItem = firstVisibleItem;
-                    }
-                });
-                lv.post(() -> {
-                    if (initialItem >= 0)
-                        lv.setSelection(initialItem);
-                });
+                View v = super.onCreateView(inflater, container, savedInstanceState);
+
+                final ListView lv = v.findViewById(android.R.id.list);
+                if (lv != null) {
+                    lv.setOnScrollListener(new OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(AbsListView view, int scrollState) {
+                        }
+
+                        @Override
+                        public void onScroll(AbsListView view, int firstVisibleItem,
+                                             int visibleItemCount, int totalItemCount) {
+                            currentItem = firstVisibleItem;
+                        }
+                    });
+                    lv.post(() -> {
+                        if (initialItem >= 0)
+                            lv.setSelection(initialItem);
+                    });
+                }
+
+                return v;
             }
-
-            return v;
         }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, insets) -> {
-            v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
-                insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
-            return insets.consumeSystemWindowInsets();
-        });
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         initialItem = settings.getInt("prefsViewInitialItem", -1);
-        getFragmentManager().beginTransaction()
-                            .replace(android.R.id.content, new Fragment())
-                            .commit();
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+        supportFragmentManager
+            .beginTransaction()
+            .replace(android.R.id.content, new Fragment())
+            .commit();
+        supportFragmentManager.addOnBackStackChangedListener(() -> {
+            if (supportFragmentManager.getBackStackEntryCount() == 0) {
+                setTitle(R.string.preferences);
+            }
+        });
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, insets) -> {
+            Insets bars = insets.getInsets(
+                WindowInsetsCompat.Type.displayCutout()
+                    | WindowInsetsCompat.Type.systemBars()
+            );
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
         Util.setFullScreenMode(this, settings);
     }
 
@@ -159,5 +176,25 @@ public class Preferences extends PreferenceActivity {
             handlers.remove(requestCode);
             handler.handleResult(resultCode, data);
         }
+    }
+
+    @Override
+    public boolean onPreferenceStartFragment(@NonNull PreferenceFragmentCompat caller, @NonNull Preference pref) {
+        // Instantiate the new Fragment.
+        final Bundle args = pref.getExtras();
+        final androidx.fragment.app.Fragment fragment = getSupportFragmentManager().getFragmentFactory().instantiate(
+            getClassLoader(),
+            pref.getFragment());
+        fragment.setArguments(args);
+        fragment.setTargetFragment(caller, 0);
+        // Replace the existing Fragment with the new Fragment.
+        getSupportFragmentManager().beginTransaction()
+            .replace(android.R.id.content, fragment)
+            .addToBackStack(null)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .commit();
+        // update title
+        setTitle(pref.getTitle());
+        return true;
     }
 }

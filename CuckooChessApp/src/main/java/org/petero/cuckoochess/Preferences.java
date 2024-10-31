@@ -19,7 +19,7 @@
 package org.petero.cuckoochess;
 
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import androidx.preference.PreferenceActivity;
 
 public class Preferences extends PreferenceActivity {
 

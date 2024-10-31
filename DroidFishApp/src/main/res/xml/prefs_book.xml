@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ListPreference
+        app:key="bookMaxLength"
+        app:title="@string/prefs_bookMaxLength_title"
+        app:summary="@string/prefs_bookMaxLength_summary"
+        app:entryValues="@array/book_line_length_values"
+        app:entries="@array/book_line_length_texts"
+        app:defaultValue="@string/book_line_length_default">
+    </ListPreference>
+    <CheckBoxPreference
+        app:key="bookPreferMainLines"
+        app:title="@string/prefs_bookPreferMainLines_title"
+        app:summary="@string/prefs_bookPreferMainLines_summary"
+        app:defaultValue="false">
+    </CheckBoxPreference>
+    <CheckBoxPreference
+        app:key="bookTournamentMode"
+        app:title="@string/prefs_bookTournamentMode_title"
+        app:summary="@string/prefs_bookTournamentMode_summary"
+        app:defaultValue="false">
+    </CheckBoxPreference>
+    <org.petero.droidfish.activities.util.SeekBarPreference
+        app:key="bookRandom"
+        app:defaultValue="500"
+        app:title="@string/prefs_bookRandom_title">
+    </org.petero.droidfish.activities.util.SeekBarPreference>
+    <org.petero.droidfish.activities.util.EditFilePreference
+        app:key="bookFile"
+        app:title="@string/prefs_bookFile_title"
+        app:summary="@string/prefs_bookFile_summary"
+        defaultPath="DroidFish/book/"
+        ignorePattern=".*:$"
+        app:defaultValue="">
+    </org.petero.droidfish.activities.util.EditFilePreference>
+</PreferenceScreen>

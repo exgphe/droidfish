@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import org.petero.droidfish.activities.CPUWarning;
@@ -115,7 +116,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -756,7 +757,10 @@ public class DroidFish extends Activity
 
     /** Return true if the WRITE_EXTERNAL_STORAGE permission has been granted. */
     private boolean storageAvailable() {
-        return storagePermission == PermissionState.GRANTED;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            return storagePermission == PermissionState.GRANTED;
+        }
+        return false;
     }
 
     /**
@@ -1478,22 +1482,25 @@ public class DroidFish extends Activity
         leftDrawer = findViewById(R.id.left_drawer);
         rightDrawer = findViewById(R.id.right_drawer);
 
-        final DrawerItem[] leftItems = new DrawerItem[] {
-            new DrawerItem(DrawerItemId.NEW_GAME, R.string.option_new_game),
-            new DrawerItem(DrawerItemId.SET_STRENGTH, R.string.set_engine_strength),
-            new DrawerItem(DrawerItemId.EDIT_BOARD, R.string.option_edit_board),
-            new DrawerItem(DrawerItemId.FILE_MENU, R.string.option_file),
-            new DrawerItem(DrawerItemId.SELECT_BOOK, R.string.option_select_book),
-            new DrawerItem(DrawerItemId.MANAGE_ENGINES, R.string.option_manage_engines),
-            new DrawerItem(DrawerItemId.SET_COLOR_THEME, R.string.option_color_theme),
-            new DrawerItem(DrawerItemId.SETTINGS, R.string.option_settings),
-            new DrawerItem(DrawerItemId.ABOUT, R.string.option_about),
-        };
+        List<DrawerItem> leftItems = new ArrayList<DrawerItem>() {{
+            add(new DrawerItem(DrawerItemId.NEW_GAME, R.string.option_new_game));
+            add(new DrawerItem(DrawerItemId.SET_STRENGTH, R.string.set_engine_strength));
+            add(new DrawerItem(DrawerItemId.EDIT_BOARD, R.string.option_edit_board));
+            if (storageAvailable()) {
+                add(new DrawerItem(DrawerItemId.FILE_MENU, R.string.option_file));
+                add(new DrawerItem(DrawerItemId.SELECT_BOOK, R.string.option_select_book));
+            }
+            add(new DrawerItem(DrawerItemId.MANAGE_ENGINES, R.string.option_manage_engines));
+            add(new DrawerItem(DrawerItemId.SET_COLOR_THEME, R.string.option_color_theme));
+            add(new DrawerItem(DrawerItemId.SETTINGS, R.string.option_settings));
+            add(new DrawerItem(DrawerItemId.ABOUT, R.string.option_about));
+        }};
+
         leftDrawer.setAdapter(new ArrayAdapter<>(this,
                                                  R.layout.drawer_list_item,
                                                  leftItems));
         leftDrawer.setOnItemClickListener((parent, view, position, id) -> {
-            DrawerItem di = leftItems[position];
+            DrawerItem di = leftItems.get(position);
             handleDrawerSelection(di.id);
         });
 
@@ -1542,8 +1549,7 @@ public class DroidFish extends Activity
             break;
         }
         case FILE_MENU:
-            if (storageAvailable())
-                reShowDialog(FILE_MENU_DIALOG);
+            reShowDialog(FILE_MENU_DIALOG);
             break;
         case RESIGN:
             if (ctrl.humansTurn())
