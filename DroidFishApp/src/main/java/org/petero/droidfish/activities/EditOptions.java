@@ -36,6 +36,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
+import androidx.core.view.ViewCompat;
 import androidx.databinding.DataBindingUtil;
 
 import org.petero.droidfish.DroidFishApp;
@@ -70,6 +71,11 @@ public class EditOptions extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, insets) -> {
+            v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
+                insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+            return insets.consumeSystemWindowInsets();
+        });
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         Util.setFullScreenMode(this, settings);

@@ -33,16 +33,17 @@ public class OpenExchangeEngine extends ExternalEngine {
     }
 
     @Override
-    protected String copyFile(File from, File exeDir) throws IOException {
-        new File(internalSFPath()).delete();
-        ChessEngineResolver resolver = new ChessEngineResolver(context);
-        List<ChessEngine> engines = resolver.resolveEngines();
-        for (ChessEngine engine : engines) {
-            if (EngineUtil.openExchangeFileName(engine).equals(from.getName())) {
-                File engineFile = engine.copyToFiles(context.getContentResolver(), exeDir);
-                return engineFile.getAbsolutePath();
-            }
-        }
-        throw new IOException("Engine not found");
+    protected String copyFile(File exeDir) throws IOException {
+//        new File(internalSFPath()).delete();
+//        ChessEngineResolver resolver = new ChessEngineResolver(context);
+//        List<ChessEngine> engines = resolver.resolveEngines();
+//        for (ChessEngine engine : engines) {
+//            if (EngineUtil.openExchangeFileName(engine).equals(from.getName())) {
+//                File engineFile = engine.copyToFiles(context.getContentResolver(), exeDir);
+//                return engineFile.getAbsolutePath();
+//            }
+//        }
+//        throw new IOException("Engine not found");
+        return null; // TODO: Implement this method
     }
 }

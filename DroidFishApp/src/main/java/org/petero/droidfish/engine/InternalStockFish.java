@@ -104,20 +104,20 @@ public class InternalStockFish extends ExternalEngine {
     }
 
     @Override
-    protected String copyFile(File from, File exeDir) throws IOException {
-        File to = new File(exeDir, "engine.exe");
-        final String sfExe = EngineUtil.internalStockFishName();
-
-        // The checksum test is to avoid writing to /data unless necessary,
-        // on the assumption that it will reduce memory wear.
-        long oldCSum = readCheckSum(new File(internalSFPath()));
-        long newCSum = computeAssetsCheckSum(sfExe);
-        if (oldCSum != newCSum) {
-            copyAssetFile(sfExe, to);
-            writeCheckSum(new File(internalSFPath()), newCSum);
-        }
+    protected String copyFile(File exeDir) throws IOException {
+//        File to = new File(exeDir, "engine.exe");
+//        final String sfExe = EngineUtil.internalStockFishName();
+//
+//        // The checksum test is to avoid writing to /data unless necessary,
+//        // on the assumption that it will reduce memory wear.
+//        long oldCSum = readCheckSum(new File(internalSFPath()));
+//        long newCSum = computeAssetsCheckSum(sfExe);
+//        if (oldCSum != newCSum) {
+//            copyAssetFile(sfExe, to);
+//            writeCheckSum(new File(internalSFPath()), newCSum);
+//        }
         copyNetFiles(exeDir);
-        return to.getAbsolutePath();
+        return exeDir.getAbsolutePath();
     }
 
     /** Copy the Stockfish default network files to "exeDir" if they are not already there. */

@@ -38,6 +38,8 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 
+import androidx.core.view.ViewCompat;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -86,6 +88,11 @@ public class Preferences extends PreferenceActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, insets) -> {
+            v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
+                insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+            return insets.consumeSystemWindowInsets();
+        });
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         initialItem = settings.getInt("prefsViewInitialItem", -1);
         getFragmentManager().beginTransaction()

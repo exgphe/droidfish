@@ -54,6 +54,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.view.ViewCompat;
+
 public class LoadScid extends ListActivity {
     private static final class GameInfo {
         String summary = "";
@@ -112,7 +114,11 @@ public class LoadScid extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, insets) -> {
+            v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
+                insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+            return insets.consumeSystemWindowInsets();
+        });
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         if (savedInstanceState != null) {
             defaultItem = savedInstanceState.getInt("defaultScidItem");

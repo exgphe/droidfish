@@ -70,11 +70,11 @@ public class ExternalEngine extends UCIEngineBase {
     @Override
     protected void startProcess() {
         try {
-            File exeDir = new File(context.getFilesDir(), "engine");
-            exeDir.mkdir();
-            String exePath = copyFile(engineFileName, exeDir);
-            chmod(exePath);
-            cleanUpExeDir(exeDir, exePath);
+            copyFile(new File(context.getFilesDir(), "engine"));
+            File exeDir = new File(context.getApplicationInfo().nativeLibraryDir);
+            String exePath = exeDir.getAbsolutePath() + EngineUtil.internalStockFishName();
+//            chmod(exePath);
+//            cleanUpExeDir(exeDir, exePath);
             ProcessBuilder pb = new ProcessBuilder(exePath);
             if (engineWorkDir.canRead() && engineWorkDir.isDirectory())
                 pb.directory(engineWorkDir);
@@ -290,22 +290,22 @@ public class ExternalEngine extends UCIEngineBase {
             stdErrThread.interrupt();
     }
 
-    protected String copyFile(File from, File exeDir) throws IOException {
-        File to = new File(exeDir, "engine.exe");
-        new File(internalSFPath()).delete();
-        if (to.exists() && (from.length() == to.length()) && (from.lastModified() == to.lastModified()))
-            return to.getAbsolutePath();
-        try (FileInputStream fis = new FileInputStream(from);
-             FileChannel inFC = fis.getChannel();
-             FileOutputStream fos = new FileOutputStream(to);
-             FileChannel outFC = fos.getChannel()) {
-            long cnt = outFC.transferFrom(inFC, 0, inFC.size());
-            if (cnt < inFC.size())
-                throw new IOException("File copy failed");
-        } finally {
-            to.setLastModified(from.lastModified());
-        }
-        return to.getAbsolutePath();
+    protected String copyFile(File exeDir) throws IOException {
+//        File to = new File(exeDir, "engine.exe");
+//        new File(internalSFPath()).delete();
+//        if (to.exists() && (from.length() == to.length()) && (from.lastModified() == to.lastModified()))
+//            return to.getAbsolutePath();
+//        try (FileInputStream fis = new FileInputStream(from);
+//             FileChannel inFC = fis.getChannel();
+//             FileOutputStream fos = new FileOutputStream(to);
+//             FileChannel outFC = fos.getChannel()) {
+//            long cnt = outFC.transferFrom(inFC, 0, inFC.size());
+//            if (cnt < inFC.size())
+//                throw new IOException("File copy failed");
+//        } finally {
+//            to.setLastModified(from.lastModified());
+//        }
+        return exeDir.getAbsolutePath();
     }
 
     private void chmod(String exePath) throws IOException {

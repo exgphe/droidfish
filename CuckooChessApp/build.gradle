@@ -34,9 +34,6 @@ android {
         }
     }
 
-    lintOptions {
-        abortOnError false
-    }
     compileOptions {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
@@ -44,6 +41,10 @@ android {
 
     buildFeatures {
         dataBinding true
+    }
+    namespace 'org.petero.cuckoochess'
+    lint {
+        abortOnError false
     }
 }
 

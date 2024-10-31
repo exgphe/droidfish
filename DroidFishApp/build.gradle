@@ -1,18 +1,28 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
 
     defaultConfig {
         applicationId "org.petero.droidfish"
-        minSdkVersion 16
-        targetSdkVersion 28
+        minSdkVersion 21
+        targetSdkVersion 35
+        compileSdk 35
+        ndkVersion "27.2.12479018"
         versionCode 100
         versionName "1.90"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             ndkBuild {
                 arguments '-j8'
+            }
+        }
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+        }
+        sourceSets {
+            main {
+                // let gradle pack the shared library into apk
+                jniLibs.srcDirs = ['src/main/libs']
             }
         }
     }
@@ -44,9 +54,6 @@ android {
         }
     }
 
-    lintOptions {
-        abortOnError false
-    }
     compileOptions {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
@@ -77,20 +84,29 @@ task buildEco {
 }
 preBuild.dependsOn buildEco
 
-// Copy Stockfish executables to assets directory
-task copyToAssets(type: Copy, dependsOn: 'externalNativeBuildRelease') {
+// Copy Stockfish executables to libs directory and add lib prefix, .so suffix to the file names
+task copyToLibs(type: Copy, dependsOn: 'externalNativeBuildRelease') {
     from('build/intermediates/ndkBuild/release/obj/local') {
         include '*/stockfish'
         include '*/stockfish_nosimd'
     }
-    into 'src/main/assets'
+    into('src/main/libs')
+    rename { String fileName ->
+        return "lib" + fileName + ".so"
+    }
 }
 tasks.withType(JavaCompile) {
-    t -> t.dependsOn copyToAssets
+    t -> t.dependsOn copyToLibs
 }
 android {
-  applicationVariants.all { variant ->
-    tasks["merge${variant.name.capitalize()}Assets"]
-      .dependsOn(copyToAssets)
+
+    namespace 'org.petero.droidfish'
+    lint {
+        abortOnError false
+    }
+    applicationVariants.all { variant ->
+        tasks["merge${variant.name.capitalize()}JniLibFolders"]
+            .dependsOn(copyToLibs)
   }
 }
+

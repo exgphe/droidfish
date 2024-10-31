@@ -29,6 +29,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.core.view.ViewCompat;
+
 public class CPUWarning extends Activity {
     public static class Fragment extends DialogFragment {
         @Override
@@ -50,6 +52,11 @@ public class CPUWarning extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, insets) -> {
+            v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
+                insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+            return insets.consumeSystemWindowInsets();
+        });
         DialogFragment df = new Fragment();
         df.show(getFragmentManager(), "");
     }
