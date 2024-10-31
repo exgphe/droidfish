@@ -19,6 +19,8 @@
 
 package org.petero.droidfish;
 
+import static android.view.RoundedCorner.POSITION_BOTTOM_LEFT;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -116,6 +118,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.os.Vibrator;
+
+import androidx.core.graphics.Insets;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.PreferenceManager;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -132,6 +137,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
+import android.view.RoundedCorner;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -520,12 +526,6 @@ public class DroidFish extends Activity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, insets) -> {
-            v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
-                         insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
-            return insets.consumeSystemWindowInsets();
-        });
-
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
@@ -721,7 +721,7 @@ public class DroidFish extends Activity
     private void createDirectories() {
         if (storagePermission == PermissionState.UNKNOWN) {
             String extStorage = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-            if (ContextCompat.checkSelfPermission(this, extStorage) == 
+            if (ContextCompat.checkSelfPermission(this, extStorage) ==
                     PackageManager.PERMISSION_GRANTED) {
                 storagePermission = PermissionState.GRANTED;
             } else {
@@ -900,7 +900,7 @@ public class DroidFish extends Activity
     private boolean landScapeView() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
-    
+
     /** Return true if left-handed layout should be used. */
     private boolean leftHandedView() {
         return settings.getBoolean("leftHanded", false) && landScapeView();
@@ -950,7 +950,52 @@ public class DroidFish extends Activity
         moveList.setFocusable(false);
         thinking.setFocusable(false);
 
+        cb = findViewById(R.id.chessboard);
+
         initDrawers();
+
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, insets) -> {
+            Insets bars = insets.getInsets(
+                WindowInsetsCompat.Type.displayCutout()
+                    | WindowInsetsCompat.Type.systemBars()
+            );
+            v.setPadding(0,0,0,0);
+            firstTitleLine.setPadding(bars.left, bars.top, bars.right, 0);
+            leftDrawer.setPadding(bars.left, bars.top, 0, bars.bottom);
+            rightDrawer.setPadding(0, bars.top, bars.right, bars.bottom);
+            if(landScapeView()) {
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) cb.getLayoutParams();
+                if (leftHandedView()) {
+                    layoutParams.setMargins(0, bars.top, bars.right, bars.bottom);
+                    buttons.setPadding(bars.left,0, 0, 0);
+                    status.setPadding(bars.left, 0, 0, 0);
+                    moveListScroll.setPadding(bars.left, 0, 0, 0);
+                    thinking.setPadding(bars.left, 0, 0, bars.bottom);
+                } else {
+                    layoutParams.setMargins(bars.left, bars.top, 0, bars.bottom);
+                    buttons.setPadding(0,0, bars.right, 0);
+                    status.setPadding(0, 0, bars.right, 0);
+                    moveListScroll.setPadding(0, 0, bars.right, 0);
+                    thinking.setPadding(0, 0, bars.right, bars.bottom);
+                }
+                cb.setLayoutParams(layoutParams);
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    RoundedCorner bottomLeft = insets.toWindowInsets().getRoundedCorner(RoundedCorner.POSITION_BOTTOM_LEFT);
+                    RoundedCorner bottomRight = insets.toWindowInsets().getRoundedCorner(RoundedCorner.POSITION_BOTTOM_RIGHT);
+                    int radiusBottomLeft = 0;
+                    int radiusBottomRight = 0;
+                    if (bottomLeft != null) {
+                        radiusBottomLeft = bottomLeft.getRadius();
+                    }
+                    if (bottomRight != null) {
+                        radiusBottomRight = bottomRight.getRadius();
+                    }
+                    thinking.setPadding(bars.left + radiusBottomLeft, 0, bars.right + radiusBottomRight, bars.bottom);
+                }
+            }
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         class ClickListener implements OnClickListener, OnTouchListener {
             private float touchX = -1;
@@ -973,7 +1018,6 @@ public class DroidFish extends Activity
         secondTitleLine.setOnClickListener(listener);
         secondTitleLine.setOnTouchListener(listener);
 
-        cb = findViewById(R.id.chessboard);
         cb.setFocusable(true);
         cb.requestFocus();
         cb.setClickable(true);
@@ -3083,7 +3127,7 @@ public class DroidFish extends Activity
             double x = Math.sqrt((nPV - 1) / (double)(maxPV - 1));
             return (int)Math.round(x * maxProgress(maxPV));
         }
-        
+
         private void updateText(EditText editTxt, int nPV) {
             String txt = Integer.valueOf(nPV).toString();
             if (!txt.equals(editTxt.getText().toString())) {
@@ -3130,7 +3174,7 @@ public class DroidFish extends Activity
                         if (p != seekBar.getProgress())
                             seekBar.setProgress(p);
                         updateText(editTxt, progressToNumPV(p, maxPV));
-                        
+
                     } catch (NumberFormatException ignore) {
                     }
                 }
@@ -3526,14 +3570,14 @@ public class DroidFish extends Activity
     }
 
     public static boolean hasFenProvider(PackageManager manager) {
-        Intent i = new Intent(Intent.ACTION_GET_CONTENT); 
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("application/x-chess-fen");
         List<ResolveInfo> resolvers = manager.queryIntentActivities(i, 0);
         return (resolvers != null) && (resolvers.size() > 0);
     }
 
     private void getFen() {
-        Intent i = new Intent(Intent.ACTION_GET_CONTENT); 
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.setType("application/x-chess-fen");
         try {
             startActivityForResult(i, RESULT_GET_FEN);
