@@ -24,28 +24,28 @@
         app:summary="@string/prefs_tbEngineProbe_summary"
         app:defaultValue="true">
     </CheckBoxPreference>
-    <org.petero.droidfish.activities.util.EditFilePreference
+    <com.asile.easychess.activities.util.EditFilePreference
         app:key="gtbPath"
         app:title="@string/prefs_gtbPath_title"
         app:summary="@string/prefs_gtbPath_summary"
         pickDirectory="true"
         defaultPath="DroidFish/gtb"
         app:defaultValue="">
-    </org.petero.droidfish.activities.util.EditFilePreference>
+    </com.asile.easychess.activities.util.EditFilePreference>
     <EditTextPreference
         app:key="gtbPathNet"
         app:title="@string/prefs_gtbPathNet_title"
         app:summary="@string/prefs_gtbPathNet_summary"
         app:defaultValue="">
     </EditTextPreference>
-    <org.petero.droidfish.activities.util.EditFilePreference
+    <com.asile.easychess.activities.util.EditFilePreference
         app:key="rtbPath"
         app:title="@string/prefs_rtbPath_title"
         app:summary="@string/prefs_rtbPath_summary"
         pickDirectory="true"
         defaultPath="DroidFish/rtb"
         app:defaultValue="">
-    </org.petero.droidfish.activities.util.EditFilePreference>
+    </com.asile.easychess.activities.util.EditFilePreference>
     <EditTextPreference
         app:key="rtbPathNet"
         app:title="@string/prefs_rtbPathNet_title"

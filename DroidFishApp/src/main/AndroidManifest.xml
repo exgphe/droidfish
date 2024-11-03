@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
-    <application android:name="org.petero.droidfish.DroidFishApp"
+    <application android:name="com.asile.easychess.DroidFishApp"
                  android:icon="@mipmap/ic_launcher"
                  android:roundIcon="@mipmap/ic_launcher_round"
                  android:theme="@style/AppTheme"
@@ -129,7 +129,7 @@
         </activity>
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="org.petero.droidfish.fileprovider"
+            android:authorities="org.petero.easychess.fileprovider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data

@@ -21,7 +21,7 @@
             android:baselineAligned="false"
             android:orientation="vertical">
 
-            <org.petero.droidfish.ChessBoardPlay
+            <com.asile.easychess.ChessBoardPlay
                 android:id="@+id/loadfen_chessboard"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"/>

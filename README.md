@@ -12,7 +12,7 @@ A much weaker chess engine called *CuckooChess* is also included in
 *DroidFish*. Its primary feature is that it can be made to play very weakly so
 that even beginners have a reasonable chance to beat it.
 
-<a href="https://f-droid.org/repository/browse/?fdid=org.petero.droidfish" target="_blank">
+<a href="https://f-droid.org/repository/browse/?fdid=com.asile.easychess" target="_blank">
 <img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80"/></a>
 
 

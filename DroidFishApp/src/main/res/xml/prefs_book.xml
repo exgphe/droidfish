@@ -20,17 +20,17 @@
         app:summary="@string/prefs_bookTournamentMode_summary"
         app:defaultValue="false">
     </CheckBoxPreference>
-    <org.petero.droidfish.activities.util.SeekBarPreference
+    <com.asile.easychess.activities.util.SeekBarPreference
         app:key="bookRandom"
         app:defaultValue="500"
         app:title="@string/prefs_bookRandom_title">
-    </org.petero.droidfish.activities.util.SeekBarPreference>
-    <org.petero.droidfish.activities.util.EditFilePreference
+    </com.asile.easychess.activities.util.SeekBarPreference>
+    <com.asile.easychess.activities.util.EditFilePreference
         app:key="bookFile"
         app:title="@string/prefs_bookFile_title"
         app:summary="@string/prefs_bookFile_summary"
         defaultPath="DroidFish/book/"
         ignorePattern=".*:$"
         app:defaultValue="">
-    </org.petero.droidfish.activities.util.EditFilePreference>
+    </com.asile.easychess.activities.util.EditFilePreference>
 </PreferenceScreen>

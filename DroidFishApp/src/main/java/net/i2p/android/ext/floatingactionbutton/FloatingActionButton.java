@@ -32,7 +32,7 @@ import android.widget.TextView;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import org.petero.droidfish.R;
+import org.petero.easychess.R;
 
 public class FloatingActionButton extends AppCompatImageButton {
 

@@ -212,7 +212,7 @@
             app:defaultValue="true">
         </CheckBoxPreference>
         <Preference
-            app:fragment="org.petero.droidfish.activities.fragments.ColorsPreferenceFragment"
+            app:fragment="com.asile.easychess.activities.fragments.ColorsPreferenceFragment"
             app:key="colors"
             app:title="@string/prefs_colors_title"
             app:summary="@string/prefs_colors_summary">
@@ -221,7 +221,7 @@
     <PreferenceCategory
         app:title="@string/prefs_user_interface_behavior">
         <Preference
-            app:fragment="org.petero.droidfish.activities.fragments.ButtonPreferenceFragment"
+            app:fragment="com.asile.easychess.activities.fragments.ButtonPreferenceFragment"
             app:key="buttonSettings"
             app:title="@string/prefs_buttonSettings_title"
             app:summary="@string/prefs_buttonSettings_summary">
@@ -296,19 +296,19 @@
             app:defaultValue="true">
         </CheckBoxPreference>
         <Preference
-            app:fragment="org.petero.droidfish.activities.fragments.BookPreferenceFragment"
+            app:fragment="com.asile.easychess.activities.fragments.BookPreferenceFragment"
             app:key="bookSettings"
             app:title="@string/prefs_bookSettings_title"
             app:summary="@string/prefs_bookSettings_summary">
         </Preference>
         <Preference
-            app:fragment="org.petero.droidfish.activities.fragments.PgnPreferenceFragment"
+            app:fragment="com.asile.easychess.activities.fragments.PgnPreferenceFragment"
             app:key="pgnSettings"
             app:title="@string/prefs_pgnSettings_title"
             app:summary="@string/prefs_pgnSettings_summary">
         </Preference>
         <Preference
-            app:fragment="org.petero.droidfish.activities.fragments.EgtbPreferenceFragment"
+            app:fragment="com.asile.easychess.activities.fragments.EgtbPreferenceFragment"
             app:key="egtbSettings"
             app:title="@string/prefs_egtbSettings_title">
         </Preference>

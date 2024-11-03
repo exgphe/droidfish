@@ -33,7 +33,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import org.petero.droidfish.activities.Preferences;
+import com.asile.easychess.activities.Preferences;
 
 /**
  * @author Sergey Margaritov

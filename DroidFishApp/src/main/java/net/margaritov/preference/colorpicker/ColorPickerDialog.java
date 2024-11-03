@@ -16,7 +16,7 @@
 
 package net.margaritov.preference.colorpicker;
 
-import org.petero.droidfish.R;
+import org.petero.easychess.R;
 
 import android.app.Activity;
 import android.app.Dialog;

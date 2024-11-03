@@ -32,11 +32,11 @@
 #endif
 
 /*
- * Class:     org_petero_droidfish_engine_EngineUtil
+ * Class:     com_asile_easychess_engine_EngineUtil
  * Method:    chmod
  * Signature: (Ljava/lang/String;)Z
  */
-extern "C" JNIEXPORT jboolean JNICALL Java_org_petero_droidfish_engine_EngineUtil_chmod
+extern "C" JNIEXPORT jboolean JNICALL Java_com_asile_easychess_engine_EngineUtil_chmod
   (JNIEnv *env, jclass, jstring jExePath) {
     const char* exePath = env->GetStringUTFChars(jExePath, NULL);
     if (!exePath)
@@ -47,21 +47,21 @@ extern "C" JNIEXPORT jboolean JNICALL Java_org_petero_droidfish_engine_EngineUti
 }
 
 /*
- * Class:     org_petero_droidfish_engine_EngineUtil
+ * Class:     com_asile_easychess_engine_EngineUtil
  * Method:    reNice
  * Signature: (II)V
  */
-extern "C" JNIEXPORT void JNICALL Java_org_petero_droidfish_engine_EngineUtil_reNice
+extern "C" JNIEXPORT void JNICALL Java_com_asile_easychess_engine_EngineUtil_reNice
   (JNIEnv *env, jclass, jint pid, jint prio) {
     setpriority(PRIO_PROCESS, pid, prio);
 }
 
 /*
- * Class:     org_petero_droidfish_engine_EngineUtil
+ * Class:     com_asile_easychess_engine_EngineUtil
  * Method:    isSimdSupported
  * Signature: ()Z
  */
-extern "C" JNIEXPORT jboolean JNICALL Java_org_petero_droidfish_engine_EngineUtil_isSimdSupported
+extern "C" JNIEXPORT jboolean JNICALL Java_com_asile_easychess_engine_EngineUtil_isSimdSupported
     (JNIEnv *env, jclass) {
 #if defined(__arm__)
     using namespace cpu_features;
