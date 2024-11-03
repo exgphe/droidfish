@@ -64,6 +64,7 @@ import com.asile.easychess.tb.ProbeResult;
 import com.asile.easychess.view.MoveListView;
 import com.asile.easychess.view.ChessBoard.SquareDecoration;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import tourguide.tourguide.Overlay;
@@ -3801,7 +3802,7 @@ public class DroidFish extends Activity
             String contentTitle = getString(R.string.background_processing);
             String contentText = getString(R.string.lot_cpu_power);
             Intent notificationIntent = new Intent(this, CPUWarning.class);
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
             Notification notification = new NotificationCompat.Builder(context, channelId)
                     .setSmallIcon(icon)
@@ -3811,9 +3812,25 @@ public class DroidFish extends Activity
                     .setContentText(contentText)
                     .setContentIntent(contentIntent)
                     .build();
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 0);
+                }
+                return;
+            }
             notificationManagerCompat.notify(cpuUsage, notification);
         } else {
             notificationManagerCompat.cancel(cpuUsage);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults, int deviceId) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults, deviceId);
+        if (requestCode == 0) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setNotification(notificationActive);
+            }
         }
     }
 

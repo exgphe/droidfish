@@ -28,6 +28,9 @@ import android.os.Build;
 import androidx.preference.PreferenceManager;
 import android.widget.Toast;
 
+import com.anythink.core.api.ATSDK;
+import com.kochava.tracker.Tracker;
+
 import java.util.Locale;
 
 public class DroidFishApp extends Application {
@@ -37,6 +40,13 @@ public class DroidFishApp extends Application {
     public DroidFishApp() {
         super();
         appContext = this;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Tracker.getInstance().startWithAppGuid(getApplicationContext(), Constants.KOCHAVA_ID); // TODO: Replace YOUR_ANDROID_APP_GUID with your app GUID
+        ATSDK.init(this, Constants.TOPONAD_APP_ID, Constants.TOPONAD_APP_KEY); // TODO: Replace Your App ID and Your App Key with your App ID and App Key
     }
 
     /** Get the application context. */
