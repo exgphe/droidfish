@@ -105,6 +105,11 @@ android {
     lint {
         abortOnError false
     }
+    packaging {
+        jniLibs {
+            useLegacyPackaging true
+        }
+    }
     applicationVariants.all { variant ->
         tasks["merge${variant.name.capitalize()}JniLibFolders"]
             .dependsOn(copyToLibs)
