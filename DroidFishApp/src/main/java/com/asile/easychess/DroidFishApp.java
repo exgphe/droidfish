@@ -45,8 +45,8 @@ public class DroidFishApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Tracker.getInstance().startWithAppGuid(getApplicationContext(), Constants.KOCHAVA_ID); // TODO: Replace YOUR_ANDROID_APP_GUID with your app GUID
-        ATSDK.init(this, Constants.TOPONAD_APP_ID, Constants.TOPONAD_APP_KEY); // TODO: Replace Your App ID and Your App Key with your App ID and App Key
+        Tracker.getInstance().startWithAppGuid(getApplicationContext(), Constants.KOCHAVA_ID);
+        ATSDK.init(this, Constants.TOPONAD_APP_ID, Constants.TOPONAD_APP_KEY);
     }
 
     /** Get the application context. */

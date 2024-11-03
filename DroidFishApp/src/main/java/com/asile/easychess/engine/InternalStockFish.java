@@ -116,6 +116,8 @@ public class InternalStockFish extends ExternalEngine {
 //            copyAssetFile(sfExe, to);
 //            writeCheckSum(new File(internalSFPath()), newCSum);
 //        }
+        if(!exeDir.exists())
+            exeDir.mkdirs();
         copyNetFiles(exeDir);
         return exeDir.getAbsolutePath();
     }
