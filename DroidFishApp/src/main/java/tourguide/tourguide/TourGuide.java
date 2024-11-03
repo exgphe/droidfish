@@ -17,8 +17,8 @@ import android.widget.LinearLayout;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 
-import org.petero.easychess.R;
-import org.petero.easychess.databinding.TooltipBinding;
+import com.asile.easychess.R;
+import com.asile.easychess.databinding.TooltipBinding;
 
 /**
  * Created by tanjunrong on 2/10/15.

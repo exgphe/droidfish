@@ -30,7 +30,7 @@ import android.widget.ImageView;
 import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGParseException;
 
-import org.petero.easychess.R;
+import com.asile.easychess.R;
 import com.asile.easychess.SVGPictureDrawable;
 
 public class FileBrowseUtil {

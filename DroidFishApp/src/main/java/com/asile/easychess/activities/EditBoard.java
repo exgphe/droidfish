@@ -24,7 +24,7 @@ import java.util.Locale;
 import com.asile.easychess.DroidFish;
 import com.asile.easychess.DroidFishApp;
 import com.asile.easychess.FileUtil;
-import org.petero.easychess.R;
+import com.asile.easychess.R;
 import com.asile.easychess.Util;
 import com.asile.easychess.Util.MaterialDiff;
 import com.asile.easychess.activities.util.ChessBoardEdit;

@@ -48,12 +48,12 @@ import com.asile.easychess.ColorTheme;
 import com.asile.easychess.DroidFish;
 import com.asile.easychess.DroidFishApp;
 import com.asile.easychess.ObjectCache;
-import org.petero.easychess.R;
+import com.asile.easychess.R;
 import com.asile.easychess.Util;
 import com.asile.easychess.activities.util.PGNFile.GameInfo;
 import com.asile.easychess.activities.util.GameAdapter;
 import com.asile.easychess.activities.util.PGNFile;
-import org.petero.easychess.databinding.SelectGameBinding;
+import com.asile.easychess.databinding.SelectGameBinding;
 
 import java.io.File;
 import java.io.FileNotFoundException;

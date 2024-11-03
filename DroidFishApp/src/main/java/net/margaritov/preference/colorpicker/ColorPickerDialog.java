@@ -16,7 +16,7 @@
 
 package net.margaritov.preference.colorpicker;
 
-import org.petero.easychess.R;
+import com.asile.easychess.R;
 
 import android.app.Activity;
 import android.app.Dialog;

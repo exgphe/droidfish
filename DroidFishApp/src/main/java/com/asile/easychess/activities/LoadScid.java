@@ -26,7 +26,7 @@ import java.util.concurrent.CountDownLatch;
 import com.asile.easychess.ColorTheme;
 import com.asile.easychess.DroidFishApp;
 import com.asile.easychess.ObjectCache;
-import org.petero.easychess.R;
+import com.asile.easychess.R;
 import com.asile.easychess.Util;
 
 import android.app.Activity;

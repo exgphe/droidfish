@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.petero.easychess.R;
+import com.asile.easychess.R;
 
 
 /** Handle conversion of positions and moves to/from text format. */

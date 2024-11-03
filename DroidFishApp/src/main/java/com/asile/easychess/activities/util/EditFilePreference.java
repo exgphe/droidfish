@@ -35,7 +35,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.asile.easychess.FileUtil;
-import org.petero.easychess.R;
+import com.asile.easychess.R;
 import com.asile.easychess.activities.Preferences;
 
 import java.io.File;

@@ -129,7 +129,7 @@
         </activity>
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="org.petero.easychess.fileprovider"
+            android:authorities="com.asile.easychess.fileprovider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data

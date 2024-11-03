@@ -41,15 +41,15 @@ import androidx.databinding.DataBindingUtil;
 
 import com.asile.easychess.DroidFishApp;
 import com.asile.easychess.FileUtil;
-import org.petero.easychess.R;
+import com.asile.easychess.R;
 import com.asile.easychess.Util;
 import com.asile.easychess.activities.util.FileBrowseUtil;
-import org.petero.easychess.databinding.EditoptionsBinding;
-import org.petero.easychess.databinding.UciOptionButtonBinding;
-import org.petero.easychess.databinding.UciOptionCheckBinding;
-import org.petero.easychess.databinding.UciOptionComboBinding;
-import org.petero.easychess.databinding.UciOptionSpinBinding;
-import org.petero.easychess.databinding.UciOptionStringBinding;
+import com.asile.easychess.databinding.EditoptionsBinding;
+import com.asile.easychess.databinding.UciOptionButtonBinding;
+import com.asile.easychess.databinding.UciOptionCheckBinding;
+import com.asile.easychess.databinding.UciOptionComboBinding;
+import com.asile.easychess.databinding.UciOptionSpinBinding;
+import com.asile.easychess.databinding.UciOptionStringBinding;
 import com.asile.easychess.engine.UCIOptions;
 
 import java.io.File;

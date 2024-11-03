@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.preference.PreferenceFragmentCompat;
 
-import org.petero.easychess.R;
+import com.asile.easychess.R;
 
 public class ColorsPreferenceFragment extends PreferenceFragmentCompat {
     @Override

@@ -26,7 +26,7 @@ import java.io.InputStreamReader;
 
 import com.asile.easychess.DroidFishApp;
 import com.asile.easychess.EngineOptions;
-import org.petero.easychess.R;
+import com.asile.easychess.R;
 import android.content.Context;
 
 /** Engine running as a process started from an external resource. */

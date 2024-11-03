@@ -37,9 +37,9 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
 import com.asile.easychess.DroidFishApp;
-import org.petero.easychess.R;
-import org.petero.easychess.databinding.SeekbarPreferenceBinding;
-import org.petero.easychess.databinding.SelectPercentageBinding;
+import com.asile.easychess.R;
+import com.asile.easychess.databinding.SeekbarPreferenceBinding;
+import com.asile.easychess.databinding.SelectPercentageBinding;
 
 import java.util.Locale;
 

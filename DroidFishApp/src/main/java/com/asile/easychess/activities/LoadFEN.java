@@ -39,12 +39,12 @@ import androidx.databinding.DataBindingUtil;
 
 import com.asile.easychess.ColorTheme;
 import com.asile.easychess.DroidFishApp;
-import org.petero.easychess.R;
+import com.asile.easychess.R;
 import com.asile.easychess.Util;
 import com.asile.easychess.activities.util.FENFile;
 import com.asile.easychess.activities.util.FENFile.FenInfo;
 import com.asile.easychess.activities.util.FENFile.FenInfoResult;
-import org.petero.easychess.databinding.LoadFenBinding;
+import com.asile.easychess.databinding.LoadFenBinding;
 import com.asile.easychess.gamelogic.ChessParseError;
 import com.asile.easychess.gamelogic.Position;
 import com.asile.easychess.gamelogic.TextIO;

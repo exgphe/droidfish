@@ -29,7 +29,7 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 import com.asile.easychess.DroidFishApp;
-import org.petero.easychess.R;
+import com.asile.easychess.R;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

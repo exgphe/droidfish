@@ -19,7 +19,7 @@
 package com.asile.easychess.activities;
 
 import com.asile.easychess.DroidFishApp;
-import org.petero.easychess.R;
+import com.asile.easychess.R;
 import com.asile.easychess.Util;
 
 import android.content.Context;

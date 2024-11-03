@@ -29,7 +29,7 @@ import java.net.UnknownHostException;
 import com.asile.easychess.DroidFishApp;
 import com.asile.easychess.EngineOptions;
 import com.asile.easychess.FileUtil;
-import org.petero.easychess.R;
+import com.asile.easychess.R;
 
 import android.content.Context;
 
