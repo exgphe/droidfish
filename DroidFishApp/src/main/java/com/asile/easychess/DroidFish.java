@@ -37,6 +37,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.anythink.core.api.ATAdInfo;
+import com.anythink.core.api.ATSDK;
+import com.anythink.core.api.AdError;
+import com.anythink.splashad.api.ATSplashAd;
+import com.anythink.splashad.api.ATSplashAdExtraInfo;
+import com.anythink.splashad.api.ATSplashAdListener;
 import com.asile.easychess.activities.CPUWarning;
 import com.asile.easychess.activities.EditBoard;
 import com.asile.easychess.activities.EditOptions;
@@ -65,6 +71,7 @@ import com.asile.easychess.view.MoveListView;
 import com.asile.easychess.view.ChessBoard.SquareDecoration;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import tourguide.tourguide.Overlay;
@@ -80,7 +87,6 @@ import com.kalab.chess.enginesupport.ChessEngineResolver;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Notification;
@@ -119,6 +125,7 @@ import android.os.Vibrator;
 
 import androidx.core.graphics.Insets;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Lifecycle;
 import androidx.preference.PreferenceManager;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -157,9 +164,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("ClickableViewAccessibility")
-public class DroidFish extends Activity
-                       implements GUIInterface,
-                                  ActivityCompat.OnRequestPermissionsResultCallback {
+public class DroidFish extends AppCompatActivity
+    implements GUIInterface,
+    ActivityCompat.OnRequestPermissionsResultCallback, ATSplashAdListener {
     private ChessBoardPlay cb;
     DroidChessController ctrl = null;
     private boolean mShowThinking;
@@ -218,6 +225,49 @@ public class DroidFish extends Activity
     private boolean showVariationLine;
 
     private int autoMoveDelay; // Delay in auto forward/backward mode
+
+
+    @Override
+    public void onAdLoaded(boolean isTimeout) {
+        //加载未超时时
+        if(!isTimeout){
+            //当前Activity处于前台时进行广告展示
+            boolean inForeBackground = getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED);
+            if (inForeBackground){
+                //container大小至少占屏幕75%
+                splashAd.show(this, findViewById(R.id.view_main));
+            } else {
+                //等待应用回到前台后再进行展示
+//                needShowSplashAd = true;
+            }
+        }
+    }
+
+    @Override
+    public void onAdLoadTimeout() {
+
+    }
+
+    @Override
+    public void onNoAdError(AdError adError) {
+//        System.out.println("onNoAdError");
+    }
+
+    @Override
+    public void onAdShow(ATAdInfo atAdInfo) {
+//        System.out.println("onAdShow");
+    }
+
+    @Override
+    public void onAdClick(ATAdInfo atAdInfo) {
+//        System.out.println("onAdClick");
+    }
+
+    @Override
+    public void onAdDismiss(ATAdInfo atAdInfo, ATSplashAdExtraInfo atSplashAdExtraInfo) {
+//        System.out.println("onAdDismiss");
+    }
+
     enum AutoMode {
         OFF, FORWARD, BACKWARD
     }
@@ -260,6 +310,8 @@ public class DroidFish extends Activity
     private TourGuide tourGuide;
 
     private Speech speech;
+
+    private ATSplashAd splashAd;
 
 
     /** Defines all configurable button actions. */
@@ -527,6 +579,9 @@ public class DroidFish extends Activity
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
+//        splashAd = new ATSplashAd(getApplicationContext(), Constants.TOPONAD_SPLASH_PLACEMENT_ID, this, 5000);
+//        splashAd.loadAd();
+
         String intentPgnOrFen = null;
         String intentFilename = null;
         if (savedInstanceState == null) {
@@ -744,6 +799,7 @@ public class DroidFish extends Activity
 
     @Override
     public void onRequestPermissionsResult(int code, String[] permissions, int[] results) {
+        super.onRequestPermissionsResult(code, permissions, results);
         if (storagePermission == PermissionState.REQUESTED) {
             if ((results.length > 0) && (results[0] == PackageManager.PERMISSION_GRANTED))
                 storagePermission = PermissionState.GRANTED;
@@ -1647,6 +1703,7 @@ public class DroidFish extends Activity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
         case RESULT_SETTINGS:
             handlePrefsChange();

@@ -100,6 +100,9 @@ repositories {
     maven {
         url "https://cboost.jfrog.io/artifactory/chartboost-mediation"
     }
+//    maven {
+//        url "https://jfrog.anythinktech.com/artifactory/debugger"
+//    }
 }
 
 dependencies {
@@ -207,7 +210,9 @@ dependencies {
 
     //Tramini
     api "com.anythink.sdk:tramini-plugin-tpn:6.4.17"
-
+//
+//    // Debugger UI Tools
+//    implementation 'com.anythink.sdk:debugger-ui:1.0.3'
 }
 
 // Build the ECO database
