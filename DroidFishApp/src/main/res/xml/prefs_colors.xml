@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        app:key="colorBlank"
+        app:title=""
+        app:summary=""/>
     <PreferenceCategory
         app:title="@string/prefs_chess_board">
         <net.margaritov.preference.colorpicker.ColorPickerPreference

@@ -8,7 +8,7 @@ android {
         targetSdkVersion 35
         compileSdk 35
         ndkVersion "27.2.12479018"
-        versionCode 100
+        versionCode 101
         versionName "1.90"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
