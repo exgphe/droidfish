@@ -2,6 +2,10 @@
 <PreferenceScreen
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
+    <Preference
+        app:key="blank"
+        app:title=""
+        app:summary=""/>
     <PreferenceCategory
         app:title="@string/prefs_time_control">
         <ListPreference
@@ -295,22 +299,22 @@
             app:summary="@string/prefs_guideShowOnStart_summary"
             app:defaultValue="true">
         </CheckBoxPreference>
-        <Preference
-            app:fragment="com.asile.easychess.activities.fragments.BookPreferenceFragment"
-            app:key="bookSettings"
-            app:title="@string/prefs_bookSettings_title"
-            app:summary="@string/prefs_bookSettings_summary">
-        </Preference>
-        <Preference
-            app:fragment="com.asile.easychess.activities.fragments.PgnPreferenceFragment"
-            app:key="pgnSettings"
-            app:title="@string/prefs_pgnSettings_title"
-            app:summary="@string/prefs_pgnSettings_summary">
-        </Preference>
-        <Preference
-            app:fragment="com.asile.easychess.activities.fragments.EgtbPreferenceFragment"
-            app:key="egtbSettings"
-            app:title="@string/prefs_egtbSettings_title">
-        </Preference>
+<!--        <Preference-->
+<!--            app:fragment="com.asile.easychess.activities.fragments.BookPreferenceFragment"-->
+<!--            app:key="bookSettings"-->
+<!--            app:title="@string/prefs_bookSettings_title"-->
+<!--            app:summary="@string/prefs_bookSettings_summary">-->
+<!--        </Preference>-->
+<!--        <Preference-->
+<!--            app:fragment="com.asile.easychess.activities.fragments.PgnPreferenceFragment"-->
+<!--            app:key="pgnSettings"-->
+<!--            app:title="@string/prefs_pgnSettings_title"-->
+<!--            app:summary="@string/prefs_pgnSettings_summary">-->
+<!--        </Preference>-->
+<!--        <Preference-->
+<!--            app:fragment="com.asile.easychess.activities.fragments.EgtbPreferenceFragment"-->
+<!--            app:key="egtbSettings"-->
+<!--            app:title="@string/prefs_egtbSettings_title">-->
+<!--        </Preference>-->
     </PreferenceCategory>
 </PreferenceScreen>

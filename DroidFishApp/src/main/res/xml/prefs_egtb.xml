@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        app:key="egtbBlank"
+        app:title=""
+        app:summary=""/>
     <CheckBoxPreference
         app:key="tbHints"
         app:title="@string/prefs_tbHints_title"

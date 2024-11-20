@@ -464,6 +464,8 @@ If you are running on battery power, it is recommended that you change settings 
     <string name="buttonDesc_mode">Mode button</string>
     <string name="buttonDesc_back">Backward button</string>
     <string name="buttonDesc_forward">Forward button</string>
+    <string name="resign_not_possible">Resign is not possible in the current game state</string>
+    <string name="action_not_possible">This action cannot be performed in the current game state</string>
     <string-array name="viewPieceType_texts">
         <item>English letters</item>
         <item>Local language letters</item>

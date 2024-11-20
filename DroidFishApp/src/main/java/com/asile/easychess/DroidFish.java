@@ -226,47 +226,7 @@ public class DroidFish extends AppCompatActivity
 
     private int autoMoveDelay; // Delay in auto forward/backward mode
 
-
-    @Override
-    public void onAdLoaded(boolean isTimeout) {
-        //加载未超时时
-        if(!isTimeout){
-            //当前Activity处于前台时进行广告展示
-            boolean inForeBackground = getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED);
-            if (inForeBackground){
-                //container大小至少占屏幕75%
-                splashAd.show(this, findViewById(R.id.view_main));
-            } else {
-                //等待应用回到前台后再进行展示
-//                needShowSplashAd = true;
-            }
-        }
-    }
-
-    @Override
-    public void onAdLoadTimeout() {
-
-    }
-
-    @Override
-    public void onNoAdError(AdError adError) {
-//        System.out.println("onNoAdError");
-    }
-
-    @Override
-    public void onAdShow(ATAdInfo atAdInfo) {
-//        System.out.println("onAdShow");
-    }
-
-    @Override
-    public void onAdClick(ATAdInfo atAdInfo) {
-//        System.out.println("onAdClick");
-    }
-
-    @Override
-    public void onAdDismiss(ATAdInfo atAdInfo, ATSplashAdExtraInfo atSplashAdExtraInfo) {
-//        System.out.println("onAdDismiss");
-    }
+    GameStatus gameStatus = new GameStatus();
 
     enum AutoMode {
         OFF, FORWARD, BACKWARD
@@ -446,25 +406,25 @@ public class DroidFish extends AppCompatActivity
                     cb.setBlindMode(blindMode);
                 }
             });
-            addAction(new UIAction() {
-                public String getId() { return "loadLastFile"; }
-                public int getName() { return R.string.load_last_file; }
-                public int getIcon() { return R.raw.open_last_file; }
-                public boolean enabled() { return currFileType() != FT_NONE && storageAvailable(); }
-                public void run() {
-                    loadLastFile();
-                }
-            });
-            addAction(new UIAction() {
-                public String getId() { return "loadGame"; }
-                public int getName() { return R.string.load_game; }
-                public int getIcon() { return R.raw.open_file; }
-                public boolean enabled() { return storageAvailable(); }
-                public void run() {
-                    selectFile(R.string.select_pgn_file, R.string.pgn_load, "currentPGNFile", pgnDir,
-                               SELECT_PGN_FILE_DIALOG, RESULT_OI_PGN_LOAD);
-                }
-            });
+//            addAction(new UIAction() {
+//                public String getId() { return "loadLastFile"; }
+//                public int getName() { return R.string.load_last_file; }
+//                public int getIcon() { return R.raw.open_last_file; }
+//                public boolean enabled() { return currFileType() != FT_NONE && storageAvailable(); }
+//                public void run() {
+//                    loadLastFile();
+//                }
+//            });
+//            addAction(new UIAction() {
+//                public String getId() { return "loadGame"; }
+//                public int getName() { return R.string.load_game; }
+//                public int getIcon() { return R.raw.open_file; }
+//                public boolean enabled() { return storageAvailable(); }
+//                public void run() {
+//                    selectFile(R.string.select_pgn_file, R.string.pgn_load, "currentPGNFile", pgnDir,
+//                               SELECT_PGN_FILE_DIALOG, RESULT_OI_PGN_LOAD);
+//                }
+//            });
             addAction(new UIAction() {
                 public String getId() { return "selectEngine"; }
                 public int getName() { return R.string.select_engine; }
@@ -1646,17 +1606,32 @@ public class DroidFish extends AppCompatActivity
             startActivityForResult(i, RESULT_SETTINGS);
             break;
         }
-        case FILE_MENU:
-            reShowDialog(FILE_MENU_DIALOG);
-            break;
+//        case FILE_MENU:
+//            reShowDialog(FILE_MENU_DIALOG);
+//            break;
         case RESIGN:
+            if (gameStatus.state != Game.GameState.ALIVE) {
+                DroidFishApp.toast(R.string.resign_not_possible, Toast.LENGTH_SHORT);
+                break;
+            }
             if (ctrl.humansTurn())
                 ctrl.resignGame();
+            else {
+                DroidFishApp.toast(R.string.resign_not_possible, Toast.LENGTH_SHORT);
+            }
             break;
         case FORCE_MOVE:
+            if (gameStatus.state != Game.GameState.ALIVE) {
+                DroidFishApp.toast(R.string.action_not_possible, Toast.LENGTH_SHORT);
+                break;
+            }
             ctrl.stopSearch();
             break;
         case DRAW:
+            if (gameStatus.state != Game.GameState.ALIVE) {
+                DroidFishApp.toast(R.string.action_not_possible, Toast.LENGTH_SHORT);
+                break;
+            }
             if (ctrl.humansTurn()) {
                 if (ctrl.claimDrawIfPossible())
                     ctrl.stopPonder();
@@ -1901,6 +1876,7 @@ public class DroidFish extends AppCompatActivity
     @Override
     public void setStatus(GameStatus s) {
         String str;
+        gameStatus = s;
         switch (s.state) {
         case ALIVE:
             str = Integer.valueOf(s.moveNr).toString();
@@ -2162,7 +2138,7 @@ public class DroidFish extends AppCompatActivity
         case SET_STRENGTH_DIALOG:            return setStrengthDialog();
         case PROMOTE_DIALOG:                 return promoteDialog();
         case BOARD_MENU_DIALOG:              return boardMenuDialog();
-        case FILE_MENU_DIALOG:               return fileMenuDialog();
+//        case FILE_MENU_DIALOG:               return fileMenuDialog();
         case ABOUT_DIALOG:                   return aboutDialog();
         case SELECT_BOOK_DIALOG:             return selectBookDialog();
         case SELECT_ENGINE_DIALOG:           return selectEngineDialog(false);
@@ -2428,9 +2404,9 @@ public class DroidFish extends AppCompatActivity
             case CLIPBOARD:
                 showDialog(CLIPBOARD_DIALOG);
                 break;
-            case FILEMENU:
-                reShowDialog(FILE_MENU_DIALOG);
-                break;
+//            case FILEMENU:
+//                reShowDialog(FILE_MENU_DIALOG);
+//                break;
             case SHARE_GAME:
                 shareGameOrText(true);
                 break;
@@ -2514,79 +2490,79 @@ public class DroidFish extends AppCompatActivity
         }
     }
 
-    private Dialog fileMenuDialog() {
-        final int LOAD_LAST_FILE    = 0;
-        final int LOAD_GAME         = 1;
-        final int LOAD_POS          = 2;
-        final int LOAD_SCID_GAME    = 3;
-        final int SAVE_GAME         = 4;
-        final int LOAD_DELETED_GAME = 5;
-
-        setAutoMode(AutoMode.OFF);
-        List<String> lst = new ArrayList<>();
-        final List<Integer> actions = new ArrayList<>();
-        if (currFileType() != FT_NONE) {
-            lst.add(getString(R.string.load_last_file)); actions.add(LOAD_LAST_FILE);
-        }
-        lst.add(getString(R.string.load_game));     actions.add(LOAD_GAME);
-        lst.add(getString(R.string.load_position)); actions.add(LOAD_POS);
-        if (hasScidProvider()) {
-            lst.add(getString(R.string.load_scid_game)); actions.add(LOAD_SCID_GAME);
-        }
-        if (storageAvailable() && (new File(getAutoSaveFile())).exists()) {
-            lst.add(getString(R.string.load_del_game));  actions.add(LOAD_DELETED_GAME);
-        }
-        lst.add(getString(R.string.save_game));     actions.add(SAVE_GAME);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.load_save_menu);
-        builder.setItems(lst.toArray(new String[0]), (dialog, item) -> {
-            switch (actions.get(item)) {
-            case LOAD_LAST_FILE:
-                loadLastFile();
-                break;
-            case LOAD_GAME:
-                selectFile(R.string.select_pgn_file, R.string.pgn_load, "currentPGNFile", pgnDir,
-                              SELECT_PGN_FILE_DIALOG, RESULT_OI_PGN_LOAD);
-                break;
-            case SAVE_GAME:
-                selectFile(R.string.select_pgn_file_save, R.string.pgn_save, "currentPGNFile", pgnDir,
-                              SELECT_PGN_FILE_SAVE_DIALOG, RESULT_OI_PGN_SAVE);
-                break;
-            case LOAD_POS:
-                selectFile(R.string.select_fen_file, R.string.pgn_load, "currentFENFile", fenDir,
-                              SELECT_FEN_FILE_DIALOG, RESULT_OI_FEN_LOAD);
-                break;
-            case LOAD_SCID_GAME:
-                selectScidFile();
-                break;
-            case LOAD_DELETED_GAME:
-                loadPGNFromFile(getAutoSaveFile(), false);
-                break;
-            }
-        });
-        return builder.create();
-    }
+//    private Dialog fileMenuDialog() {
+//        final int LOAD_LAST_FILE    = 0;
+//        final int LOAD_GAME         = 1;
+//        final int LOAD_POS          = 2;
+//        final int LOAD_SCID_GAME    = 3;
+//        final int SAVE_GAME         = 4;
+//        final int LOAD_DELETED_GAME = 5;
+//
+//        setAutoMode(AutoMode.OFF);
+//        List<String> lst = new ArrayList<>();
+//        final List<Integer> actions = new ArrayList<>();
+//        if (currFileType() != FT_NONE) {
+//            lst.add(getString(R.string.load_last_file)); actions.add(LOAD_LAST_FILE);
+//        }
+//        lst.add(getString(R.string.load_game));     actions.add(LOAD_GAME);
+//        lst.add(getString(R.string.load_position)); actions.add(LOAD_POS);
+//        if (hasScidProvider()) {
+//            lst.add(getString(R.string.load_scid_game)); actions.add(LOAD_SCID_GAME);
+//        }
+//        if (storageAvailable() && (new File(getAutoSaveFile())).exists()) {
+//            lst.add(getString(R.string.load_del_game));  actions.add(LOAD_DELETED_GAME);
+//        }
+//        lst.add(getString(R.string.save_game));     actions.add(SAVE_GAME);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle(R.string.load_save_menu);
+//        builder.setItems(lst.toArray(new String[0]), (dialog, item) -> {
+//            switch (actions.get(item)) {
+//            case LOAD_LAST_FILE:
+//                loadLastFile();
+//                break;
+//            case LOAD_GAME:
+//                selectFile(R.string.select_pgn_file, R.string.pgn_load, "currentPGNFile", pgnDir,
+//                              SELECT_PGN_FILE_DIALOG, RESULT_OI_PGN_LOAD);
+//                break;
+//            case SAVE_GAME:
+//                selectFile(R.string.select_pgn_file_save, R.string.pgn_save, "currentPGNFile", pgnDir,
+//                              SELECT_PGN_FILE_SAVE_DIALOG, RESULT_OI_PGN_SAVE);
+//                break;
+//            case LOAD_POS:
+//                selectFile(R.string.select_fen_file, R.string.pgn_load, "currentFENFile", fenDir,
+//                              SELECT_FEN_FILE_DIALOG, RESULT_OI_FEN_LOAD);
+//                break;
+//            case LOAD_SCID_GAME:
+//                selectScidFile();
+//                break;
+//            case LOAD_DELETED_GAME:
+//                loadPGNFromFile(getAutoSaveFile(), false);
+//                break;
+//            }
+//        });
+//        return builder.create();
+//    }
 
     /** Open dialog to select a game/position from the last used file. */
-    private void loadLastFile() {
-        String path = currPathName();
-        if (path.length() == 0)
-            return;
-        setAutoMode(AutoMode.OFF);
-        switch (currFileType()) {
-        case FT_PGN:
-            loadPGNFromFile(path);
-            break;
-        case FT_SCID: {
-            Intent data = new Intent(path);
-            onActivityResult(RESULT_SELECT_SCID, RESULT_OK, data);
-            break;
-        }
-        case FT_FEN:
-            loadFENFromFile(path);
-            break;
-        }
-    }
+//    private void loadLastFile() {
+//        String path = currPathName();
+//        if (path.length() == 0)
+//            return;
+//        setAutoMode(AutoMode.OFF);
+//        switch (currFileType()) {
+//        case FT_PGN:
+//            loadPGNFromFile(path);
+//            break;
+//        case FT_SCID: {
+//            Intent data = new Intent(path);
+//            onActivityResult(RESULT_SELECT_SCID, RESULT_OK, data);
+//            break;
+//        }
+//        case FT_FEN:
+//            loadFENFromFile(path);
+//            break;
+//        }
+//    }
 
     private Dialog aboutDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
