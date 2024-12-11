@@ -39,10 +39,12 @@ import java.util.TreeMap;
 
 import com.anythink.core.api.ATAdInfo;
 import com.anythink.core.api.ATSDK;
+import com.anythink.core.api.ATShowConfig;
 import com.anythink.core.api.AdError;
-import com.anythink.splashad.api.ATSplashAd;
-import com.anythink.splashad.api.ATSplashAdExtraInfo;
-import com.anythink.splashad.api.ATSplashAdListener;
+import com.anythink.interstitial.api.ATInterstitial;
+import com.anythink.interstitial.api.ATInterstitialListener;
+import com.anythink.rewardvideo.api.ATRewardVideoAd;
+import com.anythink.rewardvideo.api.ATRewardVideoListener;
 import com.asile.easychess.activities.CPUWarning;
 import com.asile.easychess.activities.EditBoard;
 import com.asile.easychess.activities.EditOptions;
@@ -166,7 +168,8 @@ import android.widget.Toast;
 @SuppressLint("ClickableViewAccessibility")
 public class DroidFish extends AppCompatActivity
     implements GUIInterface,
-    ActivityCompat.OnRequestPermissionsResultCallback, ATSplashAdListener {
+    ActivityCompat.OnRequestPermissionsResultCallback,
+    ATRewardVideoListener, ATInterstitialListener {
     private ChessBoardPlay cb;
     DroidChessController ctrl = null;
     private boolean mShowThinking;
@@ -228,6 +231,8 @@ public class DroidFish extends AppCompatActivity
 
     GameStatus gameStatus = new GameStatus();
 
+    private int newGameType;
+
     enum AutoMode {
         OFF, FORWARD, BACKWARD
     }
@@ -271,7 +276,9 @@ public class DroidFish extends AppCompatActivity
 
     private Speech speech;
 
-    private ATSplashAd splashAd;
+    private ATRewardVideoAd mRewardVideoAd;
+
+    private ATInterstitial mInterstitialAd;
 
 
     /** Defines all configurable button actions. */
@@ -539,8 +546,13 @@ public class DroidFish extends AppCompatActivity
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
-//        splashAd = new ATSplashAd(getApplicationContext(), Constants.TOPONAD_SPLASH_PLACEMENT_ID, this, 5000);
-//        splashAd.loadAd();
+        mRewardVideoAd = new ATRewardVideoAd(this, Constants.TOPONAD_REWARDED_VIDEO_PLACEMENT_ID);
+        mRewardVideoAd.setAdListener(this);
+        mRewardVideoAd.load();
+
+        mInterstitialAd = new ATInterstitial(this, Constants.TOPONAD_INTERSTITIAL_PLACEMENT_ID);
+        mInterstitialAd.setAdListener(this);
+        mInterstitialAd.load();
 
         String intentPgnOrFen = null;
         String intentFilename = null;
@@ -1614,8 +1626,17 @@ public class DroidFish extends AppCompatActivity
                 DroidFishApp.toast(R.string.resign_not_possible, Toast.LENGTH_SHORT);
                 break;
             }
-            if (ctrl.humansTurn())
+            if (ctrl.humansTurn()) {
                 ctrl.resignGame();
+                if (mInterstitialAd.isAdReady()) {
+                    ATShowConfig showConfig = new ATShowConfig.Builder()
+                        .scenarioId(null)
+                        .build();
+                    mInterstitialAd.show(this, showConfig);
+                } else {
+                    mInterstitialAd.load();
+                }
+            }
             else {
                 DroidFishApp.toast(R.string.resign_not_possible, Toast.LENGTH_SHORT);
             }
@@ -2277,6 +2298,20 @@ public class DroidFish extends AppCompatActivity
     }
 
     private void startNewGame(int type) {
+        newGameType = type;
+        if (mRewardVideoAd.isAdReady()) {
+            ATShowConfig showConfig = new ATShowConfig.Builder()
+                .scenarioId(null)
+                .build();
+            mRewardVideoAd.show(this, showConfig);
+        } else {
+//            mRewardVideoAd.load();
+            startNewGameAfterAd();
+        }
+    }
+
+    private void startNewGameAfterAd() {
+        int type = newGameType;
         if (type != 2) {
             int gameModeType = (type == 0) ? GameMode.PLAYER_WHITE : GameMode.PLAYER_BLACK;
             Editor editor = settings.edit();
@@ -3954,5 +3989,86 @@ public class DroidFish extends AppCompatActivity
             setAutoMode(AutoMode.OFF);
             ctrl.goNode(node);
         }
+    }
+
+    @Override
+    public void onRewardedVideoAdLoaded() {
+//        Log.d("Advertisement", "onRewardedVideoAdLoaded");
+    }
+
+    @Override
+    public void onRewardedVideoAdFailed(AdError adError) {
+        // print error
+//        Log.d("Advertisement", adError.getFullErrorInfo());
+    }
+
+    @Override
+    public void onRewardedVideoAdPlayStart(ATAdInfo atAdInfo) {
+        mRewardVideoAd.load();
+    }
+
+    @Override
+    public void onRewardedVideoAdPlayEnd(ATAdInfo atAdInfo) {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdPlayFailed(AdError adError, ATAdInfo atAdInfo) {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdClosed(ATAdInfo atAdInfo) {
+
+    }
+
+    @Override
+    public void onRewardedVideoAdPlayClicked(ATAdInfo atAdInfo) {
+
+    }
+
+    @Override
+    public void onReward(ATAdInfo atAdInfo) {
+        startNewGameAfterAd();
+    }
+
+    @Override
+    public void onInterstitialAdLoaded() {
+
+    }
+
+    @Override
+    public void onInterstitialAdLoadFail(AdError adError) {
+//        Log.d("interstitialAdLoadFail", adError.getFullErrorInfo());
+    }
+
+    @Override
+    public void onInterstitialAdClicked(ATAdInfo atAdInfo) {
+
+    }
+
+    @Override
+    public void onInterstitialAdShow(ATAdInfo atAdInfo) {
+        mInterstitialAd.load();
+    }
+
+    @Override
+    public void onInterstitialAdClose(ATAdInfo atAdInfo) {
+
+    }
+
+    @Override
+    public void onInterstitialAdVideoStart(ATAdInfo atAdInfo) {
+
+    }
+
+    @Override
+    public void onInterstitialAdVideoEnd(ATAdInfo atAdInfo) {
+
+    }
+
+    @Override
+    public void onInterstitialAdVideoError(AdError adError) {
+
     }
 }

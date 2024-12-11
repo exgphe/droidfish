@@ -47,6 +47,8 @@ public class DroidFishApp extends Application {
         super.onCreate();
         Tracker.getInstance().startWithAppGuid(getApplicationContext(), Constants.KOCHAVA_ID);
         ATSDK.init(this, Constants.TOPONAD_APP_ID, Constants.TOPONAD_APP_KEY);
+//        ATDebuggerUITest.showDebuggerUI(this, Constants.TOPONAD_SDK_DEBUG_KEY);
+//        ATSDK.setNetworkLogDebug(true);
     }
 
     /** Get the application context. */
